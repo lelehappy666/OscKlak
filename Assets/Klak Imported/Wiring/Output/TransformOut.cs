@@ -80,7 +80,6 @@ namespace Klak.Wiring
         #endregion
 
         #region Private members
-
         Vector3 _originalPosition;
         Quaternion _originalRotation;
         Vector3 _originalScale;
@@ -104,7 +103,6 @@ namespace Klak.Wiring
                 _targetTransform.localScale = _originalScale;
             }
         }
-
         #endregion
     }
 }

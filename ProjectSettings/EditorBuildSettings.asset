@@ -6,4 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/OscInput (Value).unity
+    path: Assets/Screen/Audio track/Audio track.unity
+    guid: f752557c528448e44becb2c9dec3a6af
+  m_configObjects: {}
