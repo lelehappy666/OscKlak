@@ -263,6 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6490714156401794066}
   - component: {fileID: 6490714156401794068}
+  - component: {fileID: 3582748371034513170}
   m_Layer: 5
   m_Name: AudioStack
   m_TagString: Untagged
@@ -300,3 +301,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6490714156401794067}
   m_CullTransparentMesh: 0
+--- !u!114 &3582748371034513170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6490714156401794067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11366cab079cc2949b4d006f6cbf3290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioStackTimelineSuperscript: {fileID: 0}
+  audioStackTimelineChildImage: {fileID: 0}
