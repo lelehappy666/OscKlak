@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00036621094, y: -12.227295}
+  m_AnchoredPosition: {x: 0, y: -12.227295}
   m_SizeDelta: {x: 1.5374756, y: 24.772522}
   m_Pivot: {x: 0.49996126, y: 0.00000057183206}
 --- !u!222 &741981207767442704
@@ -108,7 +108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18.1, y: 10.8}
+  m_AnchoredPosition: {x: 18.1, y: 3}
   m_SizeDelta: {x: 66.37373, y: 47.06805}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6490714155779688045
@@ -187,7 +187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000037193, y: -358.8919}
+  m_AnchoredPosition: {x: 0, y: -358.8919}
   m_SizeDelta: {x: 1.5379705, y: 693.32947}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6490714156189429703
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 6490714156401794068}
   - component: {fileID: 3582748371034513170}
   m_Layer: 5
-  m_Name: AudioStack
+  m_Name: AudioStackTimeLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

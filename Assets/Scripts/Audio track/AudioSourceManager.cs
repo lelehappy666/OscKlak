@@ -1,12 +1,10 @@
-﻿using System.Security.Principal;
-using System.Net.Mime;
-using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
+using System;
 
 public class AudioSourceManager : MonoBehaviour
 {
@@ -58,8 +56,24 @@ public class AudioSourceManager : MonoBehaviour
     [Tooltip("音轨UI模板父物体")]
     public Transform audioStackUIParent;
 
+    [FoldoutGroup("AudioStackUI")]
+    [Tooltip("音频模板")]
+    public AudioSource audioSource;
 
-    public AudioSource ss;
+    [FoldoutGroup("AudioStackUI")]
+    [Tooltip("是否在时间轴创建音频")]
+    public bool isCreatAudioSourceUI=false;
+
+    [FoldoutGroup("AudioStackUI")]
+    [Tooltip("音频数组")]
+    public List<AudioSource> audioSourcesTemplates ;
+
+    
+    [FoldoutGroup("AudioStackUI")]
+    [Tooltip("音频UI数组")]
+    public List<Image> audioSourcesUITemplates ;
+    public int coefficient;
+
 
     void Start()
     {
@@ -71,7 +85,6 @@ public class AudioSourceManager : MonoBehaviour
     void Update()
     {
         AudioSourceStackIntervalChange();
-        // print(gridLayoutGroup.spacing.x+"------");
     }
 
     /// <summary>
@@ -95,8 +108,7 @@ public class AudioSourceManager : MonoBehaviour
                     examplesPrefabImages.name=fileInfos[i].Name;
                     examplesPrefabImages.GetComponentInChildren<Text>().text=fileInfos[i].Name;
                     //点击事件
-                    // examplesPrefabImages.GetComponentInChildren<Button>().onClick.AddListener(delegate{OnClickBtnExamplePrefabImages(audioStackUI,audioStackUIParent,examplePrefabImage.name);});
-                    examplesPrefabImages.GetComponentInChildren<Button>().onClick.AddListener(delegate{loadwww(path+"/"+examplesPrefabImages.name);});
+                    examplesPrefabImages.GetComponentInChildren<Button>().onClick.AddListener(delegate{OnClickBtnExamplePrefabImages(audioStackUI,audioStackUIParent,examplesPrefabImages.name);});
                 }
             }
         }
@@ -126,15 +138,20 @@ public class AudioSourceManager : MonoBehaviour
     /// <param name="audioStackUIName"></param>
     public void OnClickBtnExamplePrefabImages(Image audioStackUI,Transform audioStackUIParent,string audioStackUIName)
     {
+        isCreatAudioSourceUI=true;
         var audioStackUIs=Instantiate(audioStackUI);
+        audioSourcesUITemplates.Add(audioStackUIs);
         audioStackUIs.transform.SetParent(audioStackUIParent);
         audioStackUIs.name=audioStackUIName;
+        audioStackUIs.GetComponentInChildren<Text>().text=audioStackUIs.name.Split('.')[0];
+        // audioStackUIs.
+        LoadAudioFile(Application.streamingAssetsPath+"/"+audioStackUIName,audioStackUIName,audioStackUIs);
+        // audioStackUI.GetComponent<Button>().OnSelect();
     }
 
     /// <summary>
     /// 鼠标滚轮滚动时音轨间隔变化
     /// </summary>
-
     public void AudioSourceStackIntervalChange()
     {
         switch  (gridLayoutGroup.spacing.x)
@@ -190,7 +207,8 @@ public class AudioSourceManager : MonoBehaviour
                     AudioSourceStackUIChange(audioStackTimes,new Vector2(1.537476f,3.05f),40,true,20);   
                 }
             break;
-            case 0.7000011f:
+            case 1.700001f:
+            print("到了");
                 audioStackSpaceX=0f;
                 if(Input.GetAxis("Mouse ScrollWheel")>0)
                 {
@@ -203,8 +221,6 @@ public class AudioSourceManager : MonoBehaviour
                 }
             break;
         }
-
-
         if(Input.GetAxis("Mouse ScrollWheel")!=0)
         {
             if(Input.GetAxis("Mouse ScrollWheel")>0)
@@ -216,9 +232,25 @@ public class AudioSourceManager : MonoBehaviour
             }
             else
             {
-                if(gridLayoutGroup.spacing.x>=0.686f)
+                if(gridLayoutGroup.spacing.x>=1.800001f)
                 {
                     gridLayoutGroup.spacing=new Vector2(gridLayoutGroup.spacing.x-audioStackSpaceX,0);
+                }
+            }
+            if(isCreatAudioSourceUI)
+            {
+                for(int i=0;i<audioSourcesUITemplates.Count;i++)
+                {
+                    if(!audioSourcesUITemplates[i].GetComponent<ImageDrap>().isDrag)
+                    {
+                        audioSourcesUITemplates[i].GetComponent<RectTransform>().sizeDelta=new Vector2(audioSourcesTemplates[i].GetComponent<AudioClipAttribute>().audioClipLenth*gridLayoutGroup.spacing.x,36.73944f);
+                        audioSourcesUITemplates[i].GetComponent<RectTransform>().anchoredPosition3D =new Vector3(audioSourcesTemplates[i].GetComponent<AudioClipAttribute>().audioClipLenth*gridLayoutGroup.spacing.x/2, audioSourcesUITemplates[i].GetComponent<RectTransform>().anchoredPosition3D.y,0);
+                    }
+                    else
+                    {
+                       audioSourcesUITemplates[i].GetComponent<RectTransform>().sizeDelta=new Vector2(audioSourcesTemplates[i].GetComponent<AudioClipAttribute>().audioClipLenth*gridLayoutGroup.spacing.x,36.73944f);
+                    }
+                    
                 }
             }
         }
@@ -256,20 +288,42 @@ public class AudioSourceManager : MonoBehaviour
                 }
             }
     }
-
-    IEnumerator wwwss(string url)
+    
+    /// <summary>
+    /// 点击音轨UI加载外部WAV音频创建AudioSource
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="audioName"></param>
+    /// <returns></returns>
+    IEnumerator LoadWavAudioFile(string url,string audioName,Image audioStackUIs)
     {
          WWW music = new WWW(url);
         yield return music;
-        AudioClip lamusic = music.GetAudioClipCompressed(true, AudioType.MPEG);
-        ss.clip=lamusic;
-        ss.Play();
+        AudioClip lamusic = music.GetAudioClipCompressed(true, AudioType.WAV);
+        AudioSource audioSources=Instantiate(audioSource);
+        audioSourcesTemplates.Add(audioSources);
+        audioSources.transform.SetParent(gameObject.transform);
+        audioSources.name=audioName;
+        audioSources.clip=lamusic;
+        //保留一位
+        string audioClipLength=String.Format("{0:F1}",audioSources.clip.length);
+        audioSources.GetComponent<AudioClipAttribute>().audioClipLenth=float.Parse(audioClipLength);
+        print(audioSources.name+"--------------"+audioSources.GetComponent<AudioClipAttribute>().audioClipLenth+"----------"+audioClipLength);
+        // audioStackUIParent.GetComponent<GridLayoutGroup>().cellSize=new Vector2(float.Parse(audioClipLength)*10*gridLayoutGroup.spacing.x,39);
+        audioStackUIs.GetComponent<RectTransform>().sizeDelta=new Vector2(float.Parse(audioClipLength)*gridLayoutGroup.spacing.x,36.73944f);
+        audioStackUIs.GetComponent<RectTransform>().anchoredPosition3D =new Vector3(float.Parse(audioClipLength)*gridLayoutGroup.spacing.x/2,237.3f-coefficient*70,0);
+        coefficient=coefficient+1;
     }
 
-    public void loadwww(string url)
+    /// <summary>
+    /// 加载音频文件在时间轴创建音频UI
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="audioName"></param>
+    public void LoadAudioFile(string url,string audioName,Image audioStackUIs)
     {
         print(url);
-        StartCoroutine(wwwss(url));
+        StartCoroutine(LoadWavAudioFile(url,audioName,audioStackUIs));
     }
 
 }

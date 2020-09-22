@@ -21,6 +21,7 @@ namespace Klak.Wiring
                 if(audioSource==null || !enabled) return;
                 if(isaudioSource) 
                 audioSource.volume=value;
+                Debug.Log(value);
             }
         }
 
